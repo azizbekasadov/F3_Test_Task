@@ -14,7 +14,7 @@ class SearchTableViewController: UITableViewController, AlertProtocol {
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.showsSearchResultsController = false
-        searchController.hidesNavigationBarDuringPresentation = true
+        searchController.hidesNavigationBarDuringPresentation = false
         searchController.definesPresentationContext = false
         searchController.automaticallyShowsScopeBar = false
         searchController.automaticallyShowsSearchResultsController = false
@@ -26,6 +26,10 @@ class SearchTableViewController: UITableViewController, AlertProtocol {
     }()
     
     private let searchService: SearchService = SearchService()
+    
+    var isUsingURLSession: Bool = true
+    var isUsingSearchBar: Bool = true
+    var isUsingCombine: Bool = false
     
     weak var coordinator: MainCoordinator?
     
@@ -50,9 +54,11 @@ class SearchTableViewController: UITableViewController, AlertProtocol {
         self.tableView.estimatedRowHeight = 130
         self.tableView.tableFooterView = UIView()
         
-        self.navigationItem.searchController = self.searchController
-        self.navigationItem.largeTitleDisplayMode = .always
-        self.navigationController?.navigationBar.prefersLargeTitles = true
+        if self.isUsingSearchBar {
+            self.navigationItem.titleView = self.searchController.searchBar
+        } else {
+            self.navigationItem.searchController = self.searchController
+        }
     }
     
     private func configure(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -63,15 +69,35 @@ class SearchTableViewController: UITableViewController, AlertProtocol {
     
     // MARK: Load data
     private func loadData(searchText: String) {
-        self.searchService.getResults(searchText: searchText) { [weak self] (results, errorMessage) in
-            if let results = results {
-                self?.response = results
-                self?.results = results.items?.map { ResultsViewModel(result: $0) }
+        if self.isUsingCombine {
+            NetworkCombinedService.shared.fetchData(searchText: searchText) { [weak self] (response) in
+                self?.response = response
+                self?.results = response?.items?.map { ResultsViewModel(result: $0) }
                 self?.tableView.reloadData()
             }
-            
-            if !errorMessage.isEmpty {
-                self?.showErrorMessage(message: "Search error: " + errorMessage)
+        } else {
+            if self.isUsingURLSession {
+                self.searchService.getResults(searchText: searchText) { [weak self] (results, errorMessage) in
+                    if let results = results {
+                        self?.response = results
+                        self?.results = results.items?.map { ResultsViewModel(result: $0) }
+                        self?.tableView.reloadData()
+                    }
+                    
+                    if !errorMessage.isEmpty {
+                        self?.showErrorMessage(message: "Search error: " + errorMessage)
+                    }
+                }
+            } else {
+                kapRequest(router: SearchRouter.volumes(q: searchText)) { (status, data: Response?, errorMessage) in
+                    if status == .OK {
+                        self.response = data
+                        self.results = data?.items?.map { ResultsViewModel(result: $0) }
+                        self.tableView.reloadData()
+                    } else {
+                        self.showErrorMessage(message: errorMessage)
+                    }
+                }
             }
         }
     }
@@ -94,13 +120,17 @@ extension SearchTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let scale = UIScreen.main.bounds.size.width/375.0
-        return scale > 1 ? 130 * scale : 130
+        return UITableView.automaticDimension > 130 ? UITableView.automaticDimension : 130
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        self.searchController.searchBar.resignFirstResponder()
+        
+        if let info = self.results?[indexPath.row] {
+            self.coordinator?.showDetails(item: info)
+        }
     }
 }
 

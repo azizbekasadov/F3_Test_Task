@@ -18,16 +18,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
+        UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000, vertical: 0), for:UIBarMetrics.default)
+        
         let splitController = SplitViewController()
         let navigationController = NavigationViewController()
         
         self.coordinator = MainCoordinator(navigationController: navigationController)
         self.coordinator?.start()
         
-        splitController.viewControllers = [navigationController, UIViewController()]
+//        splitController.viewControllers = [navigationController, UIViewController()]
         
         self.window = UIWindow(windowScene: windowScene)
-        self.window?.rootViewController = splitController
+        self.window?.rootViewController = navigationController
         self.window?.makeKeyAndVisible()
     }
 

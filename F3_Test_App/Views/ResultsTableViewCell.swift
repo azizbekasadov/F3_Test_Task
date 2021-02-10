@@ -55,6 +55,7 @@ class ResultsTableViewCell: UITableViewCell {
     private func configureUI() {
         self.titleLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.medium)
         self.authorLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
+        self.thumbnailImageView.image = UIImage(named: "ic_book")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
         
         self.updateColors()
     }
@@ -67,7 +68,8 @@ class ResultsTableViewCell: UITableViewCell {
     
     @objc private func updateColors(state: Bool = false) {
         self.titleLabel.textColor = state ? UIColor.white : UIColor.systemGray
-        self.authorLabel.textColor = state ? UIColor.white : UIColor.systemGray3
+        self.authorLabel.textColor = state ? UIColor.white : UIColor.systemGray2
+        self.thumbnailImageView.tintColor = UIColor.systemGray
         self.contentView.backgroundColor = state ? UIColor.systemBlue : UIColor.systemBackground
     }
     

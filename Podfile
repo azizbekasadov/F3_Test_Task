@@ -8,5 +8,8 @@ target 'F3_Test_App' do
   # Pods for F3_Test_App
 
   pod 'SDWebImage', '~> 5.10'
+  pod 'Alamofire'
+  pod 'MBProgressHUD'
+  pod 'ObjectMapper'
 
 end

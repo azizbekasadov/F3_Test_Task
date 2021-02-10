@@ -6,8 +6,18 @@
 //
 
 import Foundation
+import ObjectMapper
 
 struct IndustryIdentifiers: Codable {
-    let type: String?
-    let identifier: String?
+    var type: String?
+    var identifier: String?
+}
+
+extension IndustryIdentifiers: Mappable {
+    init?(map: Map) { }
+    
+    mutating func mapping(map: Map) {
+        type <- map["type"]
+        identifier <- map["identifier"]
+    }
 }

@@ -19,5 +19,6 @@ class NavigationViewController: UINavigationController {
         self.setNeedsStatusBarAppearanceUpdate()
         self.navigationItem.largeTitleDisplayMode = .automatic
         self.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.semibold)]
+        self.navigationBar.shadowImage = UIImage()
     }
 }

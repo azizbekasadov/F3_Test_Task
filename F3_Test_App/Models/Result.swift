@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import ObjectMapper
 
-struct Result: Codable {
-    let kind: String?
-    let id: String?
-    let etag: String?
-    let selfLink: String?
-    let volumeInfo: VolumeInfo?
+struct Result: Codable, Identifiable {
+    var kind: String?
+    var id: String?
+    var etag: String?
+    var selfLink: String?
+    var volumeInfo: VolumeInfo?
     
     enum CodingKeys: String, CodingKey {
         case kind
@@ -20,5 +21,17 @@ struct Result: Codable {
         case etag
         case selfLink
         case volumeInfo = "volumeInfo"
+    }
+}
+
+extension Result: Mappable {
+    init?(map: Map) { }
+    
+    mutating func mapping(map: Map) {
+        kind <- map["kind"]
+        id <- map["id"]
+        etag <- map["etag"]
+        selfLink <- map["selfLink"]
+        volumeInfo <- map["volumeInfo"]
     }
 }

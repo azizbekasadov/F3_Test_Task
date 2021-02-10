@@ -7,7 +7,7 @@
 
 import Foundation
 
-fileprivate let url: String = "https://www.googleapis.com/books/v1/volumes"
+let url: String = "https://www.googleapis.com/books/v1/volumes"
 
 class SearchService: NSObject {
     typealias QueryResult = (Response?, String) -> Void
@@ -60,6 +60,5 @@ class SearchService: NSObject {
             errorMessage += "JSONSerialization error: \(parseError.localizedDescription)\n"
             return
         }
-        
     }
 }

@@ -11,6 +11,7 @@ class ResultsViewModel {
     var title: String
     var authors: String?
     var image: String?
+    var description: String?
     
     let result: Result
     
@@ -27,5 +28,7 @@ class ResultsViewModel {
         if let smallThumbnail = result.volumeInfo?.imageLinks?.smallThumbnail {
             self.image = smallThumbnail
         }
+        
+        self.description = result.volumeInfo?.description
     }
 }
