@@ -7,7 +7,7 @@
 
 import Foundation
 import Alamofire
-//#if APPSTORE
+
 let BaseURLString: String = "https://www.googleapis.com/books"
 
 fileprivate let Api = "/v1"

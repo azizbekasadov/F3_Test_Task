@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000, vertical: 0), for:UIBarMetrics.default)
         
-        let splitController = SplitViewController()
+//        let splitController = SplitViewController()
         let navigationController = NavigationViewController()
         
         self.coordinator = MainCoordinator(navigationController: navigationController)
