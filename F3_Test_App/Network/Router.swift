@@ -6,8 +6,6 @@
 //
 
 import Foundation
-
-
 import Alamofire
 //#if APPSTORE
 let BaseURLString: String = "https://www.googleapis.com/books"
@@ -60,37 +58,5 @@ extension Router {
     
     var cacheable: Bool {
         return true
-    }
-}
-
-enum SerialRouter : Router {
-    case registerSerial(serial:String, deviceName:String)
-    
-    var path: String {
-        switch self {
-        case .registerSerial:
-            return "/device"
-        }
-    }
-    
-    var method: HTTPMethod {
-        switch self {
-        case .registerSerial:
-            return .post
-        }
-    }
-    
-    var parameters: Parameters {
-        switch self {
-        case .registerSerial(let serial, let deviceName):
-            return ["deviceId":serial, "name": deviceName]
-        }
-    }
-    
-    var encoding: ParameterEncoding {
-        switch self {
-        case .registerSerial:
-            return JSONEncoding.default
-        }
     }
 }
