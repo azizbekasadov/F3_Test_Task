@@ -9,15 +9,6 @@ import Foundation
 
 
 import Alamofire
-
-//#if DEBUG
-//    fileprivate let BaseURLString = "https://mobile.kapitalbank.uz"
-//#else
-//fileprivate let BaseURLString = "https://preprod-mobile.kapitalbank.uz"
-//    fileprivate let BaseURLString = "https://mobile.kapitalbank.uz"
-//#endif
-
-
 //#if APPSTORE
 let BaseURLString: String = "https://www.googleapis.com/books"
 
